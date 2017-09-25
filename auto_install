@@ -24,7 +24,7 @@ def install(file_dir):
         for oripackage in mainpack:                                                ### oripackage = packages:XXXXXX\r\n 
             activePackage = oripackage.split(':')[1][0:-2]                         ### activePackage = XXXXXX
             main_activity_name = "/packagename.activity_name"
-            os.popen("adb shell am start -n "+activePackage + main_activity_name)
+            os.popen("adb shell am start -n "+activePackage + main_activity_name)  ### 进入主页面，检验安装效果
         time.sleep(3)
         print "------****-------"
 if __name__ == "__main__":
