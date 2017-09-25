@@ -1,0 +1,19 @@
+# -*- coding :cp936-*-
+# coding=utf-8
+import os
+import time
+
+def delApp():
+    print "start to uninstall your apps in your box"
+    os.popen("adb wait for device...")
+    corename = raw_input("input your app package corename: ")
+    oripackages = os.popen("adb shell pm list packages {name}".format(name=corename))
+    for oripackage in oripackages:
+        deletePackage = oripackage.split(':')[1][0:-2]### 获得的报名末尾自带格式符 \r\n，可以选择去掉
+        os.popen("adb uninstall " + deletePackage) 
+        print deletePackage + " is uninstalled "
+
+if __name__ == "__main__":
+    delApp()
+    print " "
+print "All the third-party applications uninstall successed."
