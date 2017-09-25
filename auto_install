@@ -1,0 +1,36 @@
+# -*- coding :cp936-*-
+# coding=utf-8
+import os
+import time
+start = time.clock()
+def filename_ListGet(file_dir):
+    List_name=[]
+    for root, dir1, files in os.walk(file_dir):
+        for file1 in files:
+            if os.path.splitext(file1)[-1] == '.apk': ###遍历文件夹内所有文件名
+                List_name.append(os.path.join(root, file1))
+    return List_name
+def install(file_dir):
+    print "start to install your apps in your box"
+    os.popen("adb wait for device...")
+    oripackages = filename_ListGet(file_dir)
+    count =0
+    for oripackage in oripackages:
+        count+=1
+        rinstall_Package = oripackage.split(':')[1] ### 获取包名
+        os.popen("adb install -r " + rinstall_Package)
+        print rinstall_Package + " is installed "+`count`
+        mainpack = os.popen("adb shell pm list packages {name}".format(name='tv')) ### 筛选包名
+        for oripackage in mainpack:                                                ### oripackage = packages:XXXXXX\r\n 
+            activePackage = oripackage.split(':')[1][0:-2]                         ### activePackage = XXXXXX
+            main_activity_name = "/packagename.activity_name"
+            os.popen("adb shell am start -n "+activePackage + main_activity_name)
+        time.sleep(3)
+        print "------****-------"
+if __name__ == "__main__":
+    file_dir = "F:/922succeed/"### 文件路径
+    install(file_dir)
+    print " "
+print "All the third-party applications installed successed."
+end = time.clock()
+print "running time : %s"%(end - start)
