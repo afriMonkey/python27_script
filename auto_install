@@ -15,18 +15,26 @@ def install(file_dir):
     os.popen("adb wait for device...")
     oripackages = filename_ListGet(file_dir)
     count =0
+    Errorpack = []                   #存储安装失败的包名
     for oripackage in oripackages:
         count+=1
         rinstall_Package = oripackage.split(':')[1] ### 获取包名
         os.popen("adb install -r " + rinstall_Package)
         print rinstall_Package + " is installed "+`count`
         mainpack = os.popen("adb shell pm list packages {name}".format(name='tv')) ### 筛选包名
-        for oripackage in mainpack:                                                ### oripackage = packages:XXXXXX\r\n 
-            activePackage = oripackage.split(':')[1][0:-2]                         ### activePackage = XXXXXX
-            main_activity_name = "/packagename.activity_name"
-            os.popen("adb shell am start -n "+activePackage + main_activity_name)  ### 进入主页面，检验安装效果
-        time.sleep(3)
-        print "------****-------"
+        if mainpack:                         ##包名有效，安装成功
+            for oripackage in mainpack:                                               ### oripackage = packages:XXXXXX\r\n
+                activePackage = oripackage.split(':')[1][0:-2]                         ### activePackage = XXXXXX
+                main_activity_name = "/com.iflytek.aichang.tv.app.TVMainActivity"
+                os.popen("adb shell am start -n "+activePackage + main_activity_name)  ### 进入主页面，检验安装效果
+            time.sleep(3)
+            print "------****-------"                                  
+        else:                              ## 包名为空，安装失败，存储包名
+            Errorpack.append(rinstall_Package)
+            continue
+    fobj = open('ErrorPackageName.txt', 'w')
+    fobj.writelines(['%s\n' % x for x in Errorpack])
+    fobj.close()
 if __name__ == "__main__":
     file_dir = "F:/922succeed/"### 文件路径
     install(file_dir)
