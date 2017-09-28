@@ -10,7 +10,7 @@ def suffixget():   ## 根据后缀名获取文件后缀
     suffixname = raw_input("enter your files suffix: ")
     p1 = subprocess.Popen("adb shell cd sdcard && ls |grep {suffix}".format(suffix=suffixname),
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    files = p1.stdout.read().decode('utf-8').encode('gb2312') ## 由于程序运行在windows平台，在控制台显示中文需要转换编码方式
+    files = p1.stdout.read()
     return files
 def copyfigure(figurename, path='XXX_XXX'):
     print "start to copy figures..."
@@ -23,7 +23,7 @@ def copyfigure(figurename, path='XXX_XXX'):
 if __name__ == "__main__":
     Files = suffixget()
     files = Files.split('\r\r\n')
-    path = raw_input("请输入文件夹名字: ".decode('utf-8').encode('gb2312'))    
+    path = raw_input("请输入文件夹名字: ")    
     for file in files:
         copyfigure(file)
     print "-------** finished **---------"
