@@ -1,0 +1,29 @@
+# -*- coding :cp936-*-
+# coding=utf-8
+###   读取制定后缀名的文件，并复制到PC机中
+import subprocess  # 建议使用subprocess代替os模块
+import time
+
+def suffixget():   ## 根据后缀名获取文件后缀
+    print "start to get files"
+    # os.system('ls -l')
+    suffixname = raw_input("enter your files suffix: ")
+    p1 = subprocess.Popen("adb shell cd sdcard && ls |grep {suffix}".format(suffix=suffixname),
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    files = p1.stdout.read().decode('utf-8').encode('gb2312') ## 由于程序运行在windows平台，在控制台显示中文需要转换编码方式
+    return files
+def copyfigure(figurename, path='XXX_XXX'):
+    print "start to copy figures..."
+    p2 = subprocess.Popen("adb pull /sdcard/{file} f:\{file_path}\{file}".format(file=figurename,file_path=path),
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)  ## 默认保存在F盘，盘符可自定义
+    p2.wait()   ## 待子进程结束
+    print "%s well done"%figurename
+    print '\n'
+
+if __name__ == "__main__":
+    Files = suffixget()
+    files = Files.split('\r\r\n')
+    path = raw_input("请输入文件夹名字: ".decode('utf-8').encode('gb2312'))    
+    for file in files:
+        copyfigure(file)
+    print "-------** finished **---------"
