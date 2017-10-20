@@ -1,0 +1,42 @@
+# -*- coding :cp936-*-
+# coding = utf-8
+import time
+import os
+import requests
+from selenium import webdriver
+driverpath = os.path.abspath(r"your driver path")
+browser = webdriver.Chrome(driverpath)
+url = "your website"
+browser.get(url)
+browser.find_element_by_id("loginname").send_keys("hyc")
+browser.find_element_by_name("j_password").send_keys("1")
+browser.find_element_by_xpath("/html/body/dl/dd/form/p[4]/button").click()
+browser.find_element_by_xpath("/html/body/div[2]/ul/li[3]/a").click()
+browser.find_element_by_xpath("/html/body/div[2]/ul/li[3]/ul/li[9]/a").click()
+sleeptime = 0.4
+print browser.title
+time.sleep(sleeptime)
+item_num = input("enter number U want to DownLoad : ")
+while item_num is not None:
+    Link = []
+    Name = []
+    for i in range(1, item_num + 1):
+        filename = "/html/body/div[3]/dl/dd[2]/table/tbody/tr[" + str(i) + "]/td[2]"
+        path = "/html/body/div[3]/dl/dd[2]/table/tbody/tr[" + str(i) + "]/td[4]/a"
+        link = browser.find_element_by_xpath(path).text
+        name = browser.find_element_by_xpath(filename).text
+        Name.append('No_' + str(i) + '_' + name)
+        Link.append(link)
+        time.sleep(sleeptime)
+    print "begin to download latest apks..."
+    count = 0
+    for orilink in Link:
+        link = orilink.split('\'')[-1]
+        print link
+        # print Name[count]
+        r = requests.get(link)
+        with open(Name[count], 'wb')as f:
+            f.write(r.content)
+        count += 1
+    break
+browser.quit()
