@@ -33,7 +33,7 @@ class operation_mine():
             for oripackage in mainpack:
                 activepackage = oripackage.split(':')[1][0:-2]
                 print ("Entering MainPage...")
-                main_activity_name = "/com.iflytek.aichang.tv.app.TVMainActivity"
+                main_activity_name = "/MainActivity name of your apk package"
                 os.popen("adb shell am start -n " + activepackage + main_activity_name)
             time.sleep(3)
             print ('-'*10+'*'+'-'*10)
@@ -58,6 +58,6 @@ class operation_mine():
             print "work done-------"
             pass
 if __name__ == "__main__":
-    file_dir = "F:\MIGU_aichang\ichangTV\Test_version_apk\d1020_MVplayCheck\d1020_UIcorrected"
+    file_dir = "your apkpackage absolute path"
     ex = operation_mine(file_dir)
     ex.apk_mainlog()
